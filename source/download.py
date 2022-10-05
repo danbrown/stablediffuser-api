@@ -13,8 +13,7 @@ if torch.cuda.is_available():
 
 from loadModel import loadModel
 
-
-def download_model():
+if __name__ == "__main__":
   # do a dry run of loading the huggingface model, which will download weights at build time
   # For local dev & preview deploys, download all the models (terrible for serverless deploys)
   if PRELOAD_MODEL == "ALL":
@@ -24,8 +23,5 @@ def download_model():
   else:
     print("Downloading model: " + PRELOAD_MODEL)
     loadModel(model_id=PRELOAD_MODEL, load=False)
-
-
-if __name__ == "__main__":
-  download_model()
+    
   exit(0)
