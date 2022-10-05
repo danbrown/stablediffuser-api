@@ -20,7 +20,7 @@ MODULES_PATH = os.path.join(BASE_PATH, 'modules')
 SCRIPTS_PATH = os.path.join(BASE_PATH, 'scripts')
 
 # Token to authenticate in huggingface
-HF_AUTH_TOKEN = os.environ.get('HF_AUTH_TOKEN')
+HF_AUTH_TOKEN = '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'
 
 # Models to load on diffusers
 MODEL_IDS = ["CompVis/stable-diffusion-v1-4", "hakurei/waifu-diffusion", "doohickey/trinart-waifu-diffusion-50-50"]
