@@ -8,7 +8,7 @@ API_HOST = '0.0.0.0'
 API_PORT = 3000
 
 # Base path of this project
-BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+BASE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 
 # Path to the directory where the patched files are located
 PATCHED_PATH = os.path.join(BASE_PATH, 'patches')
