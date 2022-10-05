@@ -1,5 +1,8 @@
+from pydantic import BaseModel
+from classes.cleaner import Cleaner
+from classes.manager import Manager
 
-  # class for a generation request
+# class for a generation request
 class GenerationRequest(BaseModel):
   mode: str = "PROMPT" # ["PROMPT","IMG2IMG","Inpainting","PROMPT FILE"]
   seed: int = 0 
