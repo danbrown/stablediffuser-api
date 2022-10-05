@@ -11,3 +11,9 @@ def wgeto(url, outputdir): # PAGODA
   finally:
     if res and res.strip() != '':
       print(res)
+
+
+# get the pip modules directory
+def get_pip_modules_dir():
+  import site
+  return site.getsitepackages()[0]

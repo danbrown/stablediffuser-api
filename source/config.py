@@ -16,6 +16,9 @@ PATCHED_PATH = os.path.join(BASE_PATH, 'patches')
 # Path to the modules
 MODULES_PATH = os.path.join(BASE_PATH, 'modules')
 
+# Path to scripts
+SCRIPTS_PATH = os.path.join(BASE_PATH, 'scripts')
+
 # Token to authenticate in huggingface
 HF_AUTH_TOKEN = os.getenv("HF_AUTH_TOKEN") # set in your env
 
