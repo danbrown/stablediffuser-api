@@ -1,7 +1,7 @@
 import torch
 import os
 from diffusers import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline
-from .config import HF_AUTH_TOKEN
+from config import HF_AUTH_TOKEN
 
 def loadModel(model_id: str, mode="prompt", load=True):
     # torch.multiprocessing.set_start_method("spawn", force=True)
