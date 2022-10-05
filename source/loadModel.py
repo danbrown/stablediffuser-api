@@ -10,6 +10,8 @@ def loadModel(model_id: str, mode="prompt", load=True):
 
     model = None
 
+    print('Using token: ' + HF_AUTH_TOKEN)
+
     if mode == "prompt":
       model = StableDiffusionPipeline.from_pretrained(
           model_id,
