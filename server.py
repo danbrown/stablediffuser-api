@@ -8,6 +8,7 @@ from io import BytesIO
 import nest_asyncio
 import uvicorn
 import json
+import subprocess
 
 from source.classes.manager import Manager
 from source.classes.cleaner import Cleaner
@@ -35,8 +36,18 @@ if __name__ == "__main__":
   )
 
   # Api routes
+  @app.get('/')
+  async def root(response: Response):
+    # dependency free way to check if GPU is visible
+    gpu = False
+    out = subprocess.run("nvidia-smi", shell=True)
+    if out.returncode == 0: # success state on shell command
+        gpu = True
+    response = {"state": "healthy", "gpu": gpu}
+    return Response(content=json.dumps(response), media_type="application/json")
+
   @app.post('/')
-  async def rootApi(generationRequest: GenerationRequest, response: Response):
+  async def generateRoot(generationRequest: GenerationRequest, response: Response):
     requestParameters = generationRequest.dict()
     # requestParameters["num_iters"] = 1 # force num_iters to 1
     images = generate_to_base64(requestParameters)
