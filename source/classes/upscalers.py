@@ -1,4 +1,4 @@
-from cleaner import Cleaner
+from .cleaner import Cleaner
 
 class Upscalers:
 

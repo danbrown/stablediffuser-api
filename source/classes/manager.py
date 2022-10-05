@@ -1,5 +1,5 @@
-from colab import Colab
-from cache import Cache
+from .colab import Colab
+from .cache import Cache
 from ..utils import wgeto
 
 class Manager:

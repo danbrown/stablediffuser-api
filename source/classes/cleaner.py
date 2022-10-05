@@ -1,4 +1,4 @@
-from manager import Manager
+from .manager import Manager
 
 class Cleaner:
   def clean_env():
