@@ -8,6 +8,8 @@ def loadModel(model_id: str, mode="prompt", load=True):
     
     print(("Loading" if load else "Downloading") + " model: " + model_id)
 
+    model = None
+
     if mode == "prompt":
       model = StableDiffusionPipeline.from_pretrained(
           model_id,

@@ -25,6 +25,9 @@ HF_AUTH_TOKEN = os.getenv("HF_AUTH_TOKEN") # set in your env
 # Models to load on diffusers
 MODEL_IDS = ["CompVis/stable-diffusion-v1-4", "hakurei/waifu-diffusion", "doohickey/trinart-waifu-diffusion-50-50"]
 
+# "CompVis/stable-diffusion-v1-4", "hakurei/waifu-diffusion"
+PRELOAD_MODEL = "ALL"
+
 # Upscalers modules to load
 UPSCALERS = ["None","GFPGAN","Enhanced Real-ESRGAN", "GFPGAN + Enhanced ESRGAN", "CodeFormer", "CodeFormer + Enhanced ESRGAN", "IMG2IMG"]
 
