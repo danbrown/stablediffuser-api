@@ -1,7 +1,7 @@
 # In this file, we define download_model
 # It runs during container build time to get model weights built into the container
 
-from .config import MODEL_IDS
+from config import MODEL_IDS
 
 import torch
 if torch.cuda.is_available():
@@ -13,7 +13,7 @@ if torch.cuda.is_available():
 
 # "CompVis/stable-diffusion-v1-4", "hakurei/waifu-diffusion"
 MODEL_ID = "ALL"
-from .loadModel import loadModel
+from loadModel import loadModel
 
 
 def download_model():
