@@ -1,12 +1,26 @@
-apt update
-apt install wget
+#!/bin/bash
+cd /workspace/stable-diffusion-webui
 
-cp /workspace/api/pipeline_stable_diffusion.py /venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion.py
-cp /workspace/api/pipeline_stable_diffusion_img2img.py /venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion_img2img.py
-cp /workspace/api/pipeline_stable_diffusion_inpaint.py /venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion_inpaint.py
+# update the repo
+git pull
+echo "Repo Updated"
 
-cp /workspace/api/safety_checker_patched.py /venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/safety_checker.py
+# install the requirements
+pip install -r requirements.txt
+echo "Requirements Installed"
 
-# python launch.py --port 3000 --disable-console-progressbars --listen &
+# download the models
+python3 source/download.py
+echo "Models Downloaded"
 
-python /workspace/api/api.py
+# patch the models
+cp /workspace/stable-diffusion-webui/patches/pipeline_stable_diffusion.py /venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion.py
+cp /workspace/stable-diffusion-webui/patches/pipeline_stable_diffusion_img2img.py /venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion_img2img.py
+cp /workspace/stable-diffusion-webui/patches/pipeline_stable_diffusion_inpaint.py /venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion_inpaint.py
+echo "Models Patched"
+
+# patch safety filter
+cp /workspace/stable-diffusion-webui/patches/safety_checker_patched.py /venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/safety_checker.py
+echo "Safety Filter Patched"
+
+# python /workspace/stable-diffusion-webui/server.py
