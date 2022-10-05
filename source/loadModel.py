@@ -15,14 +15,14 @@ def loadModel(model_id: str, mode="prompt", load=True):
     if mode == "prompt":
       model = StableDiffusionPipeline.from_pretrained(
           model_id,
-          revision="fp16",
+          # revision="fp16",
           torch_dtype=torch.float16,
           use_auth_token=HF_AUTH_TOKEN,
       )
     elif mode == "img2img":
       model = StableDiffusionImg2ImgPipeline.from_pretrained(
           model_id,
-          revision="fp16",
+          # revision="fp16",
           torch_dtype=torch.float16,
           use_auth_token=HF_AUTH_TOKEN,
       )
