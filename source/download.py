@@ -19,7 +19,7 @@ def download_model():
   # For local dev & preview deploys, download all the models (terrible for serverless deploys)
   if PRELOAD_MODEL == "ALL":
     for MODEL in MODEL_IDS:
-      print("Downloading model all")
+      print("Downloading all models")
       loadModel(model_id=MODEL, load=False)
   else:
     print("Downloading model: " + PRELOAD_MODEL)

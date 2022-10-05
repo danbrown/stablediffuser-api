@@ -23,7 +23,7 @@ SCRIPTS_PATH = os.path.join(BASE_PATH, 'scripts')
 HF_AUTH_TOKEN = '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'
 
 # Models to load on diffusers
-MODEL_IDS = ["CompVis/stable-diffusion-v1-4", "hakurei/waifu-diffusion", "doohickey/trinart-waifu-diffusion-50-50"]
+MODEL_IDS = ["hakurei/waifu-diffusion", "CompVis/stable-diffusion-v1-4", "doohickey/trinart-waifu-diffusion-50-50"]
 
 # "CompVis/stable-diffusion-v1-4", "hakurei/waifu-diffusion"
 PRELOAD_MODEL = "ALL"
