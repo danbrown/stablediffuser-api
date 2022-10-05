@@ -1,5 +1,5 @@
 from classes.manager import Manager
-from classes.cleaner import Cleaner
+from cleaner import Cleaner
 
 class Cache:
   class Pipe:

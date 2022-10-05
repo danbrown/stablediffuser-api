@@ -1,4 +1,4 @@
-from classes.manager import Manager
+from manager import Manager
 
 class Colab:
   def __init__(self):

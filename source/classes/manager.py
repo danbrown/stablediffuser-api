@@ -1,5 +1,5 @@
-from classes.colab import Colab
-from classes.cache import Cache
+from colab import Colab
+from cache import Cache
 from ..utils import wgeto
 
 class Manager:
