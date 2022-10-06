@@ -43,12 +43,19 @@ class Upscalers:
       nearest_value = closest_value([2,4,8],settings["upscale_amount"])
       settings["upscale_amount"] = nearest_value
       print(f'For Real-ESRGAN upscaling only 2, 4, and 8 are supported. Choosing the nearest Value: {nearest_value}')
+    
+    # create a folder for the model
     if not os.path.exists(f'{MODULES_PATH}/realesrgan'):
-      # create a folder for the model
+      Upscalers.Install.esrgan()
+
+    # install weights
+    if not os.path.exists(f'{MODULES_PATH}/realesrgan/weights/RealESRGAN_x2.pth'):
       print(subprocess.run(['wget',f'https://huggingface.co/datasets/db88/Enhanced_ESRGAN/resolve/main/RealESRGAN_x2.pth','-O',f'{MODULES_PATH}/realesrgan/weights/RealESRGAN_x2.pth'], stdout=subprocess.PIPE).stdout.decode('utf-8'))
       # wget https://huggingface.co/datasets/db88/Enhanced_ESRGAN/resolve/main/RealESRGAN_x2.pth -O {MODULES_PATH}/realesrgan/weights/RealESRGAN_x2.pth
+    if not os.path.exists(f'{MODULES_PATH}/realesrgan/weights/RealESRGAN_x4.pth'):
       print(subprocess.run(['wget',f'https://huggingface.co/datasets/db88/Enhanced_ESRGAN/resolve/main/RealESRGAN_x4.pth','-O',f'{MODULES_PATH}/realesrgan/weights/RealESRGAN_x4.pth'], stdout=subprocess.PIPE).stdout.decode('utf-8'))
       # wget https://huggingface.co/datasets/db88/Enhanced_ESRGAN/resolve/main/RealESRGAN_x4.pth -O {MODULES_PATH}/realesrgan/weights/RealESRGAN_x4.pth
+    if not os.path.exists(f'{MODULES_PATH}/realesrgan/weights/RealESRGAN_x8.pth'):
       print(subprocess.run(['wget',f'https://huggingface.co/datasets/db88/Enhanced_ESRGAN/resolve/main/RealESRGAN_x8.pth','-O',f'{MODULES_PATH}/realesrgan/weights/RealESRGAN_x8.pth'], stdout=subprocess.PIPE).stdout.decode('utf-8'))
       # wget https://huggingface.co/datasets/db88/Enhanced_ESRGAN/resolve/main/RealESRGAN_x8.pth -O {MODULES_PATH}/realesrgan/weights/RealESRGAN_x8.pth
     
