@@ -8,7 +8,7 @@ from .scheduler import Scheduler
 from ..utils import manage_imports, hugginface_credentials
 from ..config import BASE_PATH
 class Runner:
-  def run(self, pipe, settings):
+  def run(pipe, settings):
     collected_results = [] # PAGODA
 
     def sharpen_mage(image, samples=1):
