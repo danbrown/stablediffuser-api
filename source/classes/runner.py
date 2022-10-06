@@ -1,3 +1,4 @@
+import os
 
 from .diffusion import Diffusion
 from .upscalers import Upscalers
@@ -27,10 +28,11 @@ class Runner:
         counter = 1
         clean_counter = 0
         running = True
-        if settings["use_drive_for_pics"]:
-          outdir = f'{BASE_PATH}/drive/MyDrive/{settings["drive_pic_dir"]}'
-        else:
-          outdir = f'{BASE_PATH}/diffusers_output'
+   
+        outdir = f'{BASE_PATH}/diffusers_output'
+        if not os.path.exists(outdir):
+          os.makedirs(outdir)
+
         epoch_time = int(time.time())
         if settings["save_prompt_details"]:
           with open(f'{outdir}/{epoch_time}_prompt.json', 'w') as file:
