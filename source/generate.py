@@ -1,6 +1,10 @@
 from pydantic import BaseModel
+import base64
+from io import BytesIO
+
 from classes.cleaner import Cleaner
 from classes.manager import Manager
+from classes.runner import Runner
 
 # class for a generation request
 class GenerationRequest(BaseModel):
@@ -69,13 +73,13 @@ def generate_to_base64(parameters):
         current_settings["init_strength"] = batch_value
         if not batch_value == current_settings["variations_batch_init"]:
           current_settings["save_prompt_details"] = False
-        collected_round = Manager.Diffusion.Runner.run(current_settings) # array of PIL images
+        collected_round = Runner.run(current_settings) # array of PIL images
         collected.extend(collected_round)
         print(f"Batch {batch_value} done")
         batch_value += batch_increase
       print("Done with batch")
     else:
-      collected = Manager.Diffusion.Runner.run(current_settings) # array of PIL images
+      collected = Runner.run(current_settings) # array of PIL images
     
     results_base64 = []
     print('collected')

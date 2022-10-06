@@ -1,5 +1,6 @@
-from classes.manager import Manager
+from .diffusion import Diffusion
 from .cleaner import Cleaner
+from ..utils import manage_imports
 
 class Cache:
   class Pipe:
@@ -11,7 +12,7 @@ class Cache:
           self.make(settings)
       except NameError:
         self.make(settings)
-      Manager.Diffusion.Scheduler.make(settings)
+      Diffusion.Scheduler.make(settings)
       self.pipe = pipe
       self.pipetype = settings_pipetype
 
@@ -88,9 +89,9 @@ class Cache:
       pipe = None
       Cleaner.clean_env()
       pipetype = settings['mode']
-      pipe_library = Manager.manage_imports(pipetype)
+      pipe_library = manage_imports(pipetype)
       import os, subprocess, torch
-      username, token = Manager.Diffusion.creds()
+      username, token = Diffusion.creds()
       subprocess.run(['git', 'config', '--global', 'credential.helper', 'store'], stdout=subprocess.DEVNULL)
       # left_of_pipe = subprocess.Popen(["echo", token], stdout=subprocess.PIPE)
       # right_of_pipe = subprocess.run(['huggingface-cli', 'login'], stdin=left_of_pipe.stdout, stdout=subprocess.PIPE).stdout.decode('utf-8')
@@ -122,9 +123,9 @@ class Cache:
               feature_extractor = CLIPFeatureExtractor.from_pretrained(clip_model_id)
 
             if settings["scheduler"] == 'ddim clip sampled':
-              schedulers = Manager.manage_imports('ddim')
+              schedulers = manage_imports('ddim')
             else:
-              schedulers = Manager.manage_imports(settings["scheduler"])
+              schedulers = manage_imports(settings["scheduler"])
             if settings["scheduler"] == 'default' or settings["scheduler"] == 'pndm':
               scheduler = schedulers(beta_start=0.00085, beta_end=0.012, beta_schedule="scaled_linear",
                                                num_train_timesteps=1000, skip_prk_steps=True)
