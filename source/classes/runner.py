@@ -7,7 +7,7 @@ from .scheduler import Scheduler
 from ..utils import manage_imports, hugginface_credentials
 from ..config import BASE_PATH
 class Runner:
-  def run(self, settings):
+  def run(settings):
     collected_results = [] # PAGODA
 
     def sharpen_mage(image, samples=1):
@@ -18,7 +18,7 @@ class Runner:
       return im
 
     import time
-    torch, precision_scope, randint, sys = self.get_general_imports(settings)
+    torch, precision_scope, randint, sys = Runner.get_general_imports(settings)
     with torch.no_grad():
       with precision_scope("cuda"):
         if settings['seed'] == 0:
@@ -47,18 +47,18 @@ class Runner:
           Cleaner.clean_env()
           if settings["mode"] == "PROMPT":
             if settings['prompt_type'] == 'TEXT':
-              image = self.text_prompt(settings, torch, generator)
+              image = Runner.text_prompt(settings, torch, generator)
             else:
               for prompt in settings["file_prompt"]:
                 pass
                 # TODO
           elif settings["mode"] == "IMG2IMG":
-            image = self.img_to_img(settings, torch, generator, init_image)
+            image = Runner.img_to_img(settings, torch, generator, init_image)
           elif settings["mode"] == "Inpainting":
-            image = self.inpainting(settings, torch, generator, init_image, mask_image)
+            image = Runner.inpainting(settings, torch, generator, init_image, mask_image)
           elif settings["mode"] == "CLIP GUIDED PROMPT":
             Cleaner.clean_env()
-            image = self.clip_guided_prompt(settings, torch, generator)
+            image = Runner.clip_guided_prompt(settings, torch, generator)
             Cleaner.clean_env()
           if settings['image_upscaler'] in ['None','IMG2IMG'] or not settings["delete_originals"]:
             image.save(f'{outdir}/{epoch_time}_seed_{settings["seed"]}_original.png')
@@ -111,7 +111,7 @@ class Runner:
           if settings["img2img_postprocess"] or settings['image_upscaler'] == 'IMG2IMG':
             if settings['image_upscaler'] == 'IMG2IMG':
               image = image.resize((settings['width']*settings["upscale_amount"], settings['height']*settings["upscale_amount"]))
-            image = self.img2img_postprocess(settings, image, generator)
+            image = Runner.img2img_postprocess(settings, image, generator)
             if not settings["bulky_skip"]:
               # display(image)
               # Collect results
@@ -178,7 +178,7 @@ class Runner:
         'scale':settings['scale'],
         'steps':settings['img2img']["steps"]
     }
-    image = self.img_to_img(img2img_settings, torch, generator, image)
+    image = Runner.img_to_img(img2img_settings, torch, generator, image)
     pipe = None
     del pipe
     print('Switching back to old pipe and then displaying the image')
