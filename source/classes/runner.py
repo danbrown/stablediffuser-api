@@ -55,9 +55,9 @@ class Runner:
                 pass
                 # TODO
           elif settings["mode"] == "IMG2IMG":
-            image = Runner.img_to_img(pipe=pipe, settings=settings, torch=torch, init_image=init_image)
+            image = Runner.img_to_img(pipe=pipe, settings=settings, torch=torch, generator=generator, init_image=init_image)
           elif settings["mode"] == "Inpainting":
-            image = Runner.inpainting(pipe=pipe, settings=settings, torch=torch, init_image=init_image, mask_image=mask_image)
+            image = Runner.inpainting(pipe=pipe, settings=settings, torch=torch, generator=generator, init_image=init_image, mask_image=mask_image)
           elif settings["mode"] == "CLIP GUIDED PROMPT":
             Cleaner.clean_env()
             image = Runner.clip_guided_prompt(pipe=pipe, settings=settings, torch=torch, generator=generator)
