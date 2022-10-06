@@ -1,3 +1,6 @@
+from io import BytesIO
+import base64
+
 from .colab import Colab
 from ..utils import wgeto, manage_imports, patch_nsfw
 
@@ -18,11 +21,9 @@ class Diffusion:
     import PIL.Image
     import requests
     if 'http' in settings['init_image']:
-      from io import BytesIO
       response = requests.get(settings['init_image'])
       init_image = PIL.Image.open(BytesIO(response.content))
     elif 'data:image' in settings['init_image']:
-      import base64
       init_image = PIL.Image.open(BytesIO(base64.b64decode(settings['init_image'].split(',')[1])))
     elif settings['init_image'] is None or settings['init_image'] == "":
       init_image = Colab.Images.Painter.img2img(settings['width'], settings['height'])
