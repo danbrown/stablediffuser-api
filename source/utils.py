@@ -94,7 +94,7 @@ def manage_imports(requester):
     return DDIMScheduler
 
 # get hugginface credentials
-def creds():
+def hugginface_credentials():
   return 'x90', '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'
 
 # install a given model

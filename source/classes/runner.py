@@ -3,7 +3,7 @@ from .upscalers import Upscalers
 from .cleaner import Cleaner
 from .cache import Cache
 from .scheduler import Scheduler
-from ..utils import manage_imports
+from ..utils import manage_imports, hugginface_credentials
 
 class Runner:
   def run(self, settings):
@@ -141,7 +141,7 @@ class Runner:
     Cleaner.clean_env()
     pipe_library = manage_imports("IMG2IMG")
     import os, subprocess, torch
-    username, token = Diffusion.creds()
+    username, token = hugginface_credentials()
     subprocess.run(['git', 'config', '--global', 'credential.helper', 'store'], stdout=subprocess.DEVNULL)
     # left_of_pipe = subprocess.Popen(["echo", token], stdout=subprocess.PIPE)
     # right_of_pipe = subprocess.run(['huggingface-cli', 'login'], stdin=left_of_pipe.stdout, stdout=subprocess.PIPE).stdout.decode('utf-8')

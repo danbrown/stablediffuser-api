@@ -1,7 +1,7 @@
 from .diffusion import Diffusion
 from .cleaner import Cleaner
 from .scheduler import Scheduler
-from ..utils import manage_imports
+from ..utils import manage_imports, hugginface_credentials
 
 class Cache:
   class Pipe:
@@ -92,7 +92,7 @@ class Cache:
       pipetype = settings['mode']
       pipe_library = manage_imports(pipetype)
       import os, subprocess, torch
-      username, token = Diffusion.creds()
+      username, token = hugginface_credentials()
       subprocess.run(['git', 'config', '--global', 'credential.helper', 'store'], stdout=subprocess.DEVNULL)
       # left_of_pipe = subprocess.Popen(["echo", token], stdout=subprocess.PIPE)
       # right_of_pipe = subprocess.run(['huggingface-cli', 'login'], stdin=left_of_pipe.stdout, stdout=subprocess.PIPE).stdout.decode('utf-8')
