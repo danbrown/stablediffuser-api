@@ -10,13 +10,7 @@ class Manager:
     # display(Javascript("google.colab.output.resizeIframeToContent()"))
 
   def manage_imports(requester):
-    if requester == 'manage_drive':
-      from os.path import exists
-      from os import makedirs
-      from google.colab import drive
-      return exists, drive.mount, makedirs
-
-    elif requester == 'patch_nsfw':
+    if requester == 'patch_nsfw':
       from shutil import copyfile
       from os import remove
       return copyfile, remove
@@ -109,9 +103,6 @@ class Manager:
         Cache.Pipe.make(settings)
     except NameError:
       Cache.Pipe.make(settings)
-    if settings["use_drive_for_pics"]:
-      Colab.manage_drive(settings['drive_pic_dir'])
-    
 
   class Diffusion:
     def patch_nsfw(ENABLE_NSFW_FILTER):

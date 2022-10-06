@@ -1,26 +1,15 @@
-from .manager import Manager
-
 class Colab:
   def __init__(self):
     self.settings = self.UserSettings.set_settings()
 
   def clear():
     from IPython.display import clear_output; clear_output()
-
-  def manage_drive(drive_pic_dir):
-    exists, mount, makedirs = Manager.manage_imports('manage_drive')
-    if not exists('/workspace/api/drive'):
-      mount('/workspace/api/drive')
-    if not exists(f'/workspace/api/drive/MyDrive/{drive_pic_dir}'):
-      makedirs(f'/workspace/api/drive/MyDrive/{drive_pic_dir}')
-
   class Images:
     def resize_image():
       pass
 
     def suggest_resolution():
       pass
-      
     class Painter:
       def inpaint(width, height):
         import requests
