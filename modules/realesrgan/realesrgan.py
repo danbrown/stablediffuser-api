@@ -4,7 +4,7 @@ from PIL import Image
 import numpy as np
 import cv2
 
-from rrdbnet_arch import RRDBNet
+from .rrdbnet_arch import RRDBNet
 from utils_sr import *
 
 
