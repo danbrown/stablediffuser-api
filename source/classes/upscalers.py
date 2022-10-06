@@ -58,7 +58,7 @@ class Upscalers:
     # print(subprocess.run(['touch', f'{MODULES_PATH}/__init__.py'], stdout=subprocess.PIPE).stdout.decode('utf-8'))
     
     # import the realesrgan module
-    from ...modules.realesrgan import RealESRGAN
+    from modules import RealESRGAN
 
     import torch
     model = RealESRGAN(torch.device('cuda'), scale = settings["upscale_amount"])
