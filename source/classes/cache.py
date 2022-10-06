@@ -1,5 +1,6 @@
 from .diffusion import Diffusion
 from .cleaner import Cleaner
+from .scheduler import Scheduler
 from ..utils import manage_imports
 
 class Cache:
@@ -12,7 +13,7 @@ class Cache:
           self.make(settings)
       except NameError:
         self.make(settings)
-      Diffusion.Scheduler.make(settings)
+      Scheduler.make(settings)
       self.pipe = pipe
       self.pipetype = settings_pipetype
 

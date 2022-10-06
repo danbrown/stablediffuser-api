@@ -2,6 +2,7 @@ from .diffusion import Diffusion
 from .upscalers import Upscalers
 from .cleaner import Cleaner
 from .cache import Cache
+from .scheduler import Scheduler
 from ..utils import manage_imports
 
 class Runner:
@@ -182,7 +183,7 @@ class Runner:
     print('Switching back to old pipe and then displaying the image')
     Cleaner.clean_env()
     Cache.Pipe.make(settings)
-    Diffusion.Scheduler.make(settings)
+    Scheduler.make(settings)
     return image
 
   def get_general_imports(settings):

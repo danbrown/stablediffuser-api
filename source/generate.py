@@ -2,9 +2,9 @@ from pydantic import BaseModel
 import base64
 from io import BytesIO
 
-from classes.cleaner import Cleaner
-from classes.manager import Manager
-from classes.runner import Runner
+from .classes.cleaner import Cleaner
+from .classes.manager import Manager
+from .classes.runner import Runner
 
 # class for a generation request
 class GenerationRequest(BaseModel):
