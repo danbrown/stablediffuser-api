@@ -1,10 +1,11 @@
+
 from .diffusion import Diffusion
 from .upscalers import Upscalers
 from .cleaner import Cleaner
 from .cache import Cache
 from .scheduler import Scheduler
 from ..utils import manage_imports, hugginface_credentials
-
+from ..config import BASE_PATH
 class Runner:
   def run(self, settings):
     collected_results = [] # PAGODA
@@ -27,9 +28,9 @@ class Runner:
         clean_counter = 0
         running = True
         if settings["use_drive_for_pics"]:
-          outdir = f'/workspace/api/drive/MyDrive/{settings["drive_pic_dir"]}'
+          outdir = f'{BASE_PATH}/drive/MyDrive/{settings["drive_pic_dir"]}'
         else:
-          outdir = '/workspace/api/diffusers_output'
+          outdir = f'{BASE_PATH}/diffusers_output'
         epoch_time = int(time.time())
         if settings["save_prompt_details"]:
           with open(f'{outdir}/{epoch_time}_prompt.json', 'w') as file:

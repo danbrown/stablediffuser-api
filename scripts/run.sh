@@ -23,4 +23,4 @@ echo "Models Patched"
 cp /workspace/stable-diffusion-webui/patches/safety_checker_patched.py /venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/safety_checker.py
 echo "Safety Filter Patched"
 
-# python /workspace/stable-diffusion-webui/server.py
+# python /workspace/stable-diffusion-webui/server.py &

@@ -1,3 +1,4 @@
+from ..config import BASE_PATH
 class Colab:
   def __init__(self):
     self.settings = self.UserSettings.set_settings()
@@ -170,7 +171,7 @@ class Colab:
         return PIL.Image.open('init_mask.png')
       def img2img(width, height):
         import os
-        os.chdir('/workspace/api/')
+        os.chdir(f'{BASE_PATH}')
         def draw(filename='drawing.png', color="black", bg_color="transparent",w=256, h=256, line_width=1,loop=False):
           import google
           from IPython.display import HTML
@@ -324,7 +325,7 @@ class Colab:
         
         draw(filename = "custom_image.png", w=width, h=height, bg_color="blue", line_width=10)
         import PIL.Image
-        return PIL.Image.open("/workspace/api/custom_image.png")
+        return PIL.Image.open(f'{BASE_PATH}/custom_image.png')
 
   class UserSettings:
 
@@ -377,7 +378,7 @@ class Colab:
 
       #@markdown MODE: PROMPT FILE SETTINGS
       if MODE == "PROMPT FILE":
-        FILE_LOCATION = "/workspace/api/diffusers_output/1663720628_prompt.json" #@param {type:"string"}
+        FILE_LOCATION = f'{BASE_PATH}/diffusers_output/1663720628_prompt.json' #@param {type:"string"}
         settings['prompt_file'] = FILE_LOCATION
 
       #@markdown ---

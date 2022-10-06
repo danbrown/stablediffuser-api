@@ -1,3 +1,5 @@
+from .config import PATCHED_PATH
+
 # This file set up utility functions
 
 # Get a remote file and save it to disk (using wget)
@@ -110,9 +112,9 @@ def patch_nsfw(ENABLE_NSFW_FILTER):
   copyfile, remove = manage_imports('patch_nsfw')
   remove('/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/safety_checker.py')
   if ENABLE_NSFW_FILTER:
-    copyfile(f'/workspace/api/safety_checker.py', '/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/safety_checker.py')
+    copyfile(f'{PATCHED_PATH}/safety_checker.py', '/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/safety_checker.py')
   else:
-    copyfile(f'/workspace/api/safety_checker_patched.py', '/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/safety_checker.py')
+    copyfile(f'{PATCHED_PATH}/safety_checker_patched.py', '/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/safety_checker.py')
 
 # install diffusers
 def install_diffusers(self, settings):
@@ -147,15 +149,15 @@ def install_diffusers(self, settings):
   # right_of_pipe = subprocess.run(['huggingface-cli', 'login'], stdin=left_of_pipe.stdout, stdout=subprocess.PIPE).stdout.decode('utf-8')
   # Diffusion.install_model(username, token, settings["model_id"])
   # Colab.clear()
-  if not os.path.exists('/workspace/api/safety_checker_patched.py'):
+  if not os.path.exists(f'{PATCHED_PATH}/safety_checker_patched.py'):
     print('Creating Patches')
-    print(subprocess.run(['cp','/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/safety_checker.py','/workspace/api/safety_checker.py'], stdout=subprocess.PIPE).stdout.decode('utf-8'))
-    print(subprocess.run(['cp','/workspace/api/safety_checker.py','/workspace/api/safety_checker_patched.py'], stdout=subprocess.PIPE).stdout.decode('utf-8'))
-    with open(f'/workspace/api/safety_checker_patched.py','r') as unpatched_file:
+    print(subprocess.run(['cp','/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/safety_checker.py',f'{PATCHED_PATH}/safety_checker.py'], stdout=subprocess.PIPE).stdout.decode('utf-8'))
+    print(subprocess.run(['cp',f'{PATCHED_PATH}/safety_checker.py',f'{PATCHED_PATH}/safety_checker_patched.py'], stdout=subprocess.PIPE).stdout.decode('utf-8'))
+    with open(f'{PATCHED_PATH}/safety_checker_patched.py','r') as unpatched_file:
       patch = unpatched_file.read().replace('for idx, has_nsfw_concept in enumerate(has_nsfw_concepts):','#for idx, has_nsfw_concept in enumerate(has_nsfw_concepts):').replace('if has_nsfw_concept:','# if has_nsfw_concept:').replace('images[idx] = np.zeros(images[idx].shape)  # black image', '# images[idx] = np.zeros(images[idx].shape)  # black image').replace("Potential NSFW content was detected in one or more images. A black image will be returned instead.","Potential NSFW content was detected in one or more images. It's patched out, no actions were taken.").replace(" Try again with a different prompt and/or seed.","")
-    with open(f'/workspace/api/safety_checker_patched.py','w') as file:
+    with open(f'{PATCHED_PATH}/safety_checker_patched.py','w') as file:
       file.write(patch)
-  with open('/workspace/api/CLIP_GUIDED.py', 'w') as file:
+  with open(f'{PATCHED_PATH}/CLIP_GUIDED.py', 'w') as file:
     file.write('''
 import inspect
 from typing import List, Optional, Union
@@ -486,15 +488,15 @@ def __call__(
   # Patch Stable Diffusion Pipelines
   print('Patching Diffusers') # PAGODA
   remove('/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion.py') # PAGODA
-  wgeto('https://raw.githubusercontent.com/WASasquatch/easydiffusion/main/replacements/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion.py', '/workspace/api/pipeline_stable_diffusion.py') # PAGODA
-  copyfile(f'/workspace/api/pipeline_stable_diffusion.py', '/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion.py') # PAGODA
+  wgeto('https://raw.githubusercontent.com/WASasquatch/easydiffusion/main/replacements/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion.py', f'{PATCHED_PATH}/pipeline_stable_diffusion.py') # PAGODA
+  copyfile(f'{PATCHED_PATH}/pipeline_stable_diffusion.py', '/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion.py') # PAGODA
 
   remove('/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion_img2img.py') # PAGODA
-  wgeto('https://raw.githubusercontent.com/WASasquatch/easydiffusion/main/replacements/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion_img2img.py', '/workspace/api/pipeline_stable_diffusion_img2img.py') # PAGODA
-  copyfile(f'/workspace/api/pipeline_stable_diffusion_img2img.py', '/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion_img2img.py') # PAGODA
+  wgeto('https://raw.githubusercontent.com/WASasquatch/easydiffusion/main/replacements/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion_img2img.py', f'{PATCHED_PATH}/pipeline_stable_diffusion_img2img.py') # PAGODA
+  copyfile(f'{PATCHED_PATH}/pipeline_stable_diffusion_img2img.py', '/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion_img2img.py') # PAGODA
 
   remove('/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion_inpaint.py') # PAGODA
-  wgeto('https://raw.githubusercontent.com/WASasquatch/easydiffusion/main/replacements/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion_inpaint.py', '/workspace/api/pipeline_stable_diffusion_inpaint.py') # PAGODA
-  copyfile(f'/workspace/api/pipeline_stable_diffusion_inpaint.py', '/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion_inpaint.py') # PAGODA
+  wgeto('https://raw.githubusercontent.com/WASasquatch/easydiffusion/main/replacements/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion_inpaint.py', f'{PATCHED_PATH}/pipeline_stable_diffusion_inpaint.py') # PAGODA
+  copyfile(f'{PATCHED_PATH}/pipeline_stable_diffusion_inpaint.py', '/venv/lib/python3.8/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion_inpaint.py') # PAGODA
   # Colab.clear() # PAGODA
 
