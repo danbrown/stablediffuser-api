@@ -22,7 +22,7 @@ if __name__ == "__main__":
   # start pipe and get settings
   Cleaner.clean_env()
   manager = Manager()
-  pipe, pipetype, last_model= manager.eval_settings()
+  pipe, pipetype, last_model = manager.eval_settings()
 
   # Create fast api app
   app = FastAPI()

@@ -38,6 +38,6 @@ class Manager:
     self.pipetype = pipetype
     self.last_model = last_model
     
-    return settings, pipe, pipetype, last_model
+    return pipe, pipetype, last_model
 
   
