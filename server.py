@@ -22,7 +22,7 @@ if __name__ == "__main__":
   # start pipe and get settings
   Cleaner.clean_env()
   manager = Manager()
-  manager.eval_settings()
+  pipe, pipetype, last_model= manager.eval_settings()
 
   # Create fast api app
   app = FastAPI()
@@ -50,7 +50,13 @@ if __name__ == "__main__":
   async def generateRoot(generationRequest: GenerationRequest, response: Response):
     requestParameters = generationRequest.dict()
     # requestParameters["num_iters"] = 1 # force num_iters to 1
-    images = generate_to_base64(requestParameters)
+
+    # generate image and update types
+    global pipetype
+    global pipe
+    global last_model
+    images, pipe, pipetype, last_model = generate_to_base64(pipe=pipe, pipetype=pipetype, last_model=last_model, parameters=requestParameters)
+
 
     # IMAGE RETURN
     # response.headers["X-seed"] = str(images[0]["seed"])

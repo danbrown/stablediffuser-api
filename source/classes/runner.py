@@ -8,7 +8,7 @@ from .scheduler import Scheduler
 from ..utils import manage_imports, hugginface_credentials
 from ..config import BASE_PATH
 class Runner:
-  def run(settings):
+  def run(self, pipe, settings):
     collected_results = [] # PAGODA
 
     def sharpen_mage(image, samples=1):
@@ -49,18 +49,18 @@ class Runner:
           Cleaner.clean_env()
           if settings["mode"] == "PROMPT":
             if settings['prompt_type'] == 'TEXT':
-              image = Runner.text_prompt(settings, torch, generator)
+              image = Runner.text_prompt(pipe=pipe, settings=settings, torch=torch, generator=generator)
             else:
               for prompt in settings["file_prompt"]:
                 pass
                 # TODO
           elif settings["mode"] == "IMG2IMG":
-            image = Runner.img_to_img(settings, torch, generator, init_image)
+            image = Runner.img_to_img(pipe=pipe, settings=settings, torch=torch, init_image=init_image)
           elif settings["mode"] == "Inpainting":
-            image = Runner.inpainting(settings, torch, generator, init_image, mask_image)
+            image = Runner.inpainting(pipe=pipe, settings=settings, torch=torch, init_image=init_image, mask_image=mask_image)
           elif settings["mode"] == "CLIP GUIDED PROMPT":
             Cleaner.clean_env()
-            image = Runner.clip_guided_prompt(settings, torch, generator)
+            image = Runner.clip_guided_prompt(pipe=pipe, settings=settings, torch=torch, generator=generator)
             Cleaner.clean_env()
           if settings['image_upscaler'] in ['None','IMG2IMG'] or not settings["delete_originals"]:
             image.save(f'{outdir}/{epoch_time}_seed_{settings["seed"]}_original.png')
@@ -113,7 +113,7 @@ class Runner:
           if settings["img2img_postprocess"] or settings['image_upscaler'] == 'IMG2IMG':
             if settings['image_upscaler'] == 'IMG2IMG':
               image = image.resize((settings['width']*settings["upscale_amount"], settings['height']*settings["upscale_amount"]))
-            image = Runner.img2img_postprocess(settings, image, generator)
+            image = Runner.img2img_postprocess(pipe=pipe, settings=settings, image=image, generator=generator)
             if not settings["bulky_skip"]:
               # display(image)
               # Collect results
@@ -136,10 +136,9 @@ class Runner:
           counter += 1
     return collected_results # PAGODA    
 
-  def img2img_postprocess(self, settings, image, generator):
+  def img2img_postprocess(self, pipe, settings, image, generator):
     import torch
     print("running img2img postprocessing. Switching to img2img pipe")
-    global pipe
     pipe = None
     Cleaner.clean_env()
     pipe_library = manage_imports("IMG2IMG")
@@ -180,7 +179,7 @@ class Runner:
         'scale':settings['scale'],
         'steps':settings['img2img']["steps"]
     }
-    image = Runner.img_to_img(img2img_settings, torch, generator, image)
+    image = Runner.img_to_img(pipe=pipe, settings=img2img_settings, torch=torch, generator=generator, image=image)
     pipe = None
     del pipe
     print('Switching back to old pipe and then displaying the image')
@@ -197,8 +196,7 @@ class Runner:
       from contextlib import nullcontext
       return torch, nullcontext, randint, sys
 
-  def text_prompt(settings, torch, generator):
-    global pipe
+  def text_prompt(pipe, settings, torch, generator):
     if settings['scheduler'] == 'ddim':
       image = pipe(prompt=settings['text_prompt'], negative_prompt=settings['negative_text_prompt'], num_inference_steps=settings['steps'], width=settings['width'], height=settings['height'], guidance_scale=settings['scale'], eta=settings["ddim_eta"], generator=generator)
     else:
@@ -206,27 +204,24 @@ class Runner:
     return image["sample"][0]
     
 
-  def file_prompt(settings, torch, generator):
-    global pipe
+  def file_prompt(pipe, settings, torch, generator):
     pass
 
-  def img_to_img(settings, torch, generator, init_image):
+  def img_to_img(pipe, settings, torch, generator, init_image):
     if settings['scheduler'] == 'ddim':
       image = pipe(prompt=settings['text_prompt'], negative_prompt=settings['negative_text_prompt'], num_inference_steps=settings['steps'], init_image=init_image, strength=settings['init_strength'], eta=settings["ddim_eta"], guidance_scale=settings['scale'], generator=generator)["sample"][0]
     else:
       image = pipe(prompt=settings['text_prompt'], negative_prompt=settings['negative_text_prompt'], num_inference_steps=settings['steps'], init_image=init_image, strength=settings['init_strength'], guidance_scale=settings['scale'], generator=generator)["sample"][0]
     return image
 
-  def inpainting(settings, torch, generator, init_image, mask_image):
-    global pipe
+  def inpainting(pipe, settings, torch, generator, init_image, mask_image):
     if settings['scheduler'] == 'ddim':
       image = pipe(prompt=settings['text_prompt'], negative_prompt=settings['negative_text_prompt'], num_inference_steps=settings['steps'], init_image=init_image, mask_image=mask_image, strength=settings["inpaint_strength"], eta=settings["ddim_eta"], guidance_scale=settings['scale'], generator=generator)["sample"][0]
     else:
       image = pipe(prompt=settings['text_prompt'], negative_prompt=settings['negative_text_prompt'], num_inference_steps=settings['steps'], init_image=init_image, mask_image=mask_image, strength=settings["inpaint_strength"], guidance_scale=settings['scale'], generator=generator)["sample"][0]
     return image
 
-  def clip_guided_prompt(settings, torch, generator):
-    global pipe
+  def clip_guided_prompt(pipe, settings, torch, generator):
     if settings["unfreeze_unet"] == "True":
       pipe.unfreeze_unet()
     else:

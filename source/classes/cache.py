@@ -6,16 +6,19 @@ from ..utils import manage_imports, hugginface_credentials
 class Cache:
   class Pipe:
     def __init__(self, settings):
-      global pipe
-      global pipetype
-      try:
-        if pipetype != settings["mode"] or pipe is None:
-          self.make(settings)
-      except NameError:
-        self.make(settings)
+      self.pipe = None
+      self.pipetype = None
+      self.last_model = None  
+      # global pipe
+      # global pipetype
+      # try:
+      #   if pipetype != settings["mode"] or pipe is None:
+      #     self.make(settings)
+      # except NameError:
+      #   self.make(settings)
       Scheduler.make(settings)
-      self.pipe = pipe
-      self.pipetype = settings_pipetype
+      # self.pipe = None
+      # self.pipetype = settings_pipetype
 
     def forward(self, x, context=None, mask=None):
 
@@ -84,10 +87,9 @@ class Cache:
             if isinstance(module, CrossAttention):
                 module.forward = types.MethodType(Cache.Pipe.forward, module)
 
-    def make(settings):
-      global pipe 
-      global pipetype
+    def make(pipe, pipetype, settings):
       pipe = None
+      last_model = settings['model_id']
       Cleaner.clean_env()
       pipetype = settings['mode']
       pipe_library = manage_imports(pipetype)
@@ -172,3 +174,6 @@ class Cache:
       pipe = local_pipe
       local_pipe = None
       Cleaner.clean_env()
+
+      return pipe, pipetype, last_model
+

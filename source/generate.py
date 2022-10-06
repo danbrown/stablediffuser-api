@@ -49,48 +49,48 @@ class GenerationRequest(BaseModel):
   variations_batch_max: float = 1.0
 
 # Function to resume generation
-def generate_to_base64(parameters):
-    global last_model
-    Cleaner.clean_env()
-    manager = Manager()
-    # manager.eval_settings()
+def generate_to_base64(pipe, pipetype, last_model, parameters):
+  Cleaner.clean_env()
+  manager = Manager()
+  # manager.eval_settings()
 
-    # replace settings with request available values
-    current_settings = manager.colab.settings
-    current_settings.update(parameters)
+  # replace settings with request available values
+  current_settings = manager.colab.settings
+  current_settings.update(parameters)
 
-    manager.eval_settings(current_settings)
+  pipe, pipetype, last_model = manager.eval_settings(pipe=pipe, pipetype=pipetype, last_model=last_model, settings=current_settings)
 
-    # make images
-    last_model = current_settings["model_id"]
-    collected = []
-    
-    if current_settings['variations_batch'] and current_settings['mode'] == 'IMG2IMG':
-      batch_increase = current_settings['variations_batch_increase']
-      batch_max = current_settings['variations_batch_max']
-      batch_value = current_settings['variations_batch_init']
-      while batch_value <= batch_max:
-        current_settings["init_strength"] = batch_value
-        if not batch_value == current_settings["variations_batch_init"]:
-          current_settings["save_prompt_details"] = False
-        collected_round = Runner.run(settings=current_settings) # array of PIL images
-        collected.extend(collected_round)
-        print(f"Batch {batch_value} done")
-        batch_value += batch_increase
-      print("Done with batch")
-    else:
-      collected = Runner.run(settings=current_settings) # array of PIL images
-    
-    results_base64 = []
-    print('collected')
-    print(collected)
-    for result in collected:
-      buffered = BytesIO()
-      result["image"].save(buffered, format="JPEG")
-      # img_str = buffered.getvalue()
-      img_str = base64.b64encode(buffered.getvalue())
-      result["image"].close()
-      # result["image"] = img_str
-      result["image"] = 'data:image/jpeg;base64,' + img_str.decode('utf-8')
-      results_base64.append(result)
-    return results_base64
+  # make images
+  last_model = current_settings["model_id"]
+  collected = []
+  
+  if current_settings['variations_batch'] and current_settings['mode'] == 'IMG2IMG':
+    batch_increase = current_settings['variations_batch_increase']
+    batch_max = current_settings['variations_batch_max']
+    batch_value = current_settings['variations_batch_init']
+    while batch_value <= batch_max:
+      current_settings["init_strength"] = batch_value
+      if not batch_value == current_settings["variations_batch_init"]:
+        current_settings["save_prompt_details"] = False
+      collected_round = Runner.run(pipe=pipe, settings=current_settings) # array of PIL images
+      collected.extend(collected_round)
+      print(f"Batch {batch_value} done")
+      batch_value += batch_increase
+    print("Done with batch")
+  else:
+    collected = Runner.run(pipe=pipe, settings=current_settings) # array of PIL images
+  
+  images = []
+  print('collected')
+  print(collected)
+  for result in collected:
+    buffered = BytesIO()
+    result["image"].save(buffered, format="JPEG")
+    # img_str = buffered.getvalue()
+    img_str = base64.b64encode(buffered.getvalue())
+    result["image"].close()
+    # result["image"] = img_str
+    result["image"] = 'data:image/jpeg;base64,' + img_str.decode('utf-8')
+    images.append(result)
+  
+  return images, pipe, pipetype, last_model
